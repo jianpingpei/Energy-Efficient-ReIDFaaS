@@ -361,7 +361,7 @@ If you find this work useful, please cite our paper:
 如果您觉得这项工作有帮助，请引用我们的论文：
 
 ```bibtex
-@INPROCEEDINGS{11169601,
+@INPROCEEDINGS{pei2025reidfaas,
   author    = {Pei, Jianping and Shu, Yanjun and Ma, Zhuangyu and Zuo, Decheng and Zhang, Zhan},
   booktitle = {2025 IEEE International Conference on Web Services (ICWS)},
   title     = {ReIDFaaS: An Energy-Efficient Serverless Person Re-Identification System Across the Edge-Cloud Continuum},
