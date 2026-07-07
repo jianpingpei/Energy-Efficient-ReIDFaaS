@@ -7,8 +7,6 @@
 ### 面向边缘-云连续体的节能无服务器行人重识别系统
 
 [![Paper](https://img.shields.io/badge/IEEE-ICWS%202025-blue)](https://ieeexplore.ieee.org/document/11169601/)
-[![Python](https://img.shields.io/badge/Python-3.8%20|%203.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.2-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Knative](https://img.shields.io/badge/Knative-Serverless-0865AD?logo=knative&logoColor=white)](https://knative.dev/)
 [![K3s](https://img.shields.io/badge/K3s-Kubernetes-FFC61C?logo=k3s&logoColor=white)](https://k3s.io/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
