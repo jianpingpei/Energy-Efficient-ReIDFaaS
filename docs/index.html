@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReIDFaaS: An Energy-Efficient Serverless Person Re-Identification System</title>
+    <meta name="description" content="ReIDFaaS - An Energy-Efficient Serverless Person Re-Identification System Across the Edge-Cloud Continuum. Published at IEEE ICWS 2025.">
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-light: #e8effc;
+            --accent: #0e7490;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --border: #e5e7eb;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            background: var(--bg);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0e4a6e 100%);
+            color: #fff;
+            padding: 60px 20px 50px;
+            text-align: center;
+        }
+
+        .hero .venue-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(24px, 4vw, 42px);
+            font-weight: 700;
+            max-width: 900px;
+            margin: 0 auto 28px;
+            line-height: 1.25;
+        }
+
+        .authors {
+            font-size: 17px;
+            margin-bottom: 6px;
+            color: rgba(255,255,255,0.92);
+        }
+
+        .authors a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+
+        .authors a:hover {
+            text-decoration: underline;
+        }
+
+        .affiliation {
+            font-size: 15px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Sections */
+        section {
+            padding: 56px 0;
+        }
+
+        section:nth-child(even) {
+            background: var(--bg-alt);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text);
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-light);
+            text-align: center;
+            max-width: 700px;
+            margin: -12px auto 32px;
+        }
+
+        /* Highlight Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .stat-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* Contribution Cards */
+        .contrib-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .contrib-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            transition: box-shadow 0.2s;
+        }
+
+        .contrib-card:hover {
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .contrib-card h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .contrib-card p {
+            font-size: 14.5px;
+            color: var(--text-light);
+            line-height: 1.65;
+        }
+
+        .contrib-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 14px;
+        }
+
+        /* Figures */
+        .figure {
+            margin: 32px 0;
+            text-align: center;
+        }
+
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .figure-caption {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        .figure-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        /* Abstract */
+        .abstract-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text);
+            text-align: justify;
+            background: var(--bg);
+            border-left: 4px solid var(--primary);
+            padding: 24px 28px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Results Table */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 15px;
+        }
+
+        .results-table th {
+            background: var(--primary);
+            color: #fff;
+            padding: 12px 16px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .results-table th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        .results-table th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .results-table td {
+            padding: 10px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-table tr:nth-child(even) {
+            background: var(--bg-alt);
+        }
+
+        .results-table tr:last-child td {
+            font-weight: 700;
+            background: var(--primary-light);
+        }
+
+        .results-table tr:last-child td:first-child {
+            border-radius: 0 0 0 8px;
+        }
+
+        .results-table tr:last-child td:last-child {
+            border-radius: 0 0 8px 0;
+        }
+
+        /* BibTeX */
+        .bibtex-box {
+            position: relative;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 24px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            padding: 32px 20px;
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+
+        footer .funding {
+            max-width: 700px;
+            margin: 0 auto 16px;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .hero {
+                padding: 40px 16px 36px;
+            }
+            .hero h1 {
+                font-size: 22px;
+            }
+            .authors {
+                font-size: 15px;
+            }
+            section {
+                padding: 40px 0;
+            }
+            .section-title {
+                font-size: 22px;
+            }
+            .stat-number {
+                font-size: 28px;
+            }
+            .figure-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+    <div class="venue-badge">IEEE ICWS 2025</div>
+    <h1>ReIDFaaS: An Energy-Efficient Serverless Person Re-Identification System Across the Edge-Cloud Continuum</h1>
+    <div class="authors">
+        <a href="#">Jianping Pei</a>,
+        <a href="#">Yanjun Shu</a><sup>*</sup>,
+        <a href="#">Zhuangyu Ma</a>,
+        <a href="#">Decheng Zuo</a>,
+        <a href="#">Zhan Zhang</a>
+    </div>
+    <div class="affiliation">Faculty of Computing, Harbin Institute of Technology, Harbin, China<br><sup>*</sup>Corresponding Author</div>
+    <div class="hero-buttons">
+        <a href="https://ieeexplore.ieee.org/document/11169601/" class="btn btn-primary" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z"/></svg>
+            Paper
+        </a>
+        <a href="https://github.com/jianpingpei/Energy-Efficient-ReIDFaaS" class="btn btn-outline" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6.02 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            Code
+        </a>
+        <a href="#citation" class="btn btn-outline">
+            <svg viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+            Cite
+        </a>
+    </div>
+</header>
+
+<!-- Key Stats -->
+<section>
+    <div class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">23.3%</div>
+                <div class="stat-label">Edge Node Availability<br>Improvement</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">55%</div>
+                <div class="stat-label">Memory Usage<br>Reduction</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">53%</div>
+                <div class="stat-label">Throughput<br>Improvement</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">30%</div>
+                <div class="stat-label">P99 Latency<br>Reduction</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Abstract -->
+<section>
+    <div class="container">
+        <h2 class="section-title">Abstract</h2>
+        <div class="abstract-text">
+            Person re-identification (Re-ID) systems in edge-cloud continuum face critical trade-offs between latency sensitivity and energy efficiency due to the resource-constrained edge environment. This paper proposes ReIDFaaS, a serverless Re-ID system that dynamically optimizes energy consumption and computational performance across the edge-cloud continuum. Leveraging serverless architectures, our system implements three key improvements: (1) An event-driven workflow triggered by motion detection, eliminating idle GPU resource consumption during inactive periods. (2) A hardware-aware dynamic scheduler that allocates tasks based on real-time energy states and container availability, achieving balanced resource utilization across heterogeneous nodes. (3) An adaptive batching mechanism that reduces cold-start frequency through latency-constrained request grouping while maintaining the efficiency of GPU memory. Experiments demonstrate a 23.3% improvement in edge node availability and 55% reduction in memory usage compared to existing methods. The system design provides practical insights for building AI services in hybrid computing environments requiring cross-framework compatibility and adaptive resource orchestration, achieving 53% higher throughput than traditional architectures.
+        </div>
+    </div>
+</section>
+
+<!-- Key Contributions -->
+<section>
+    <div class="container">
+        <h2 class="section-title">Key Contributions</h2>
+        <div class="contrib-grid">
+            <div class="contrib-card">
+                <div class="contrib-number">1</div>
+                <h3>Event-Driven Re-ID Workflow</h3>
+                <p>An event-driven Re-ID system replacing continuous computation with pedestrian movement-triggered execution, significantly reducing resource usage while maintaining real-time performance. Computational tasks (detection, extraction, tracking) activate only upon motion events.</p>
+            </div>
+            <div class="contrib-card">
+                <div class="contrib-number">2</div>
+                <h3>Energy-Efficient Scheduling</h3>
+                <p>A priority-based dynamic scheduler that integrates real-time energy reserves, hot container availability, predicted energy consumption, co-location penalties, and load constraints to optimize task placement across heterogeneous edge nodes.</p>
+            </div>
+            <div class="contrib-card">
+                <div class="contrib-number">3</div>
+                <h3>Adaptive Batching</h3>
+                <p>A latency-optimized adaptive batching mechanism that dynamically adjusts batch size and processing interval based on tail latency monitoring, reducing cold-start frequency while maintaining strict latency constraints.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- System Architecture -->
+<section>
+    <div class="container">
+        <h2 class="section-title">System Architecture</h2>
+        <p class="section-subtitle">A three-tier edge-cloud architecture with Kafka for data streaming, NFS for persistent storage, and Knative on K3s for serverless auto-scaling.</p>
+        <div class="figure">
+            <img src="images/Architecture.png" alt="ReIDFaaS System Architecture" style="max-width: 600px;">
+            <div class="figure-caption">Figure 1: ReIDFaaS system architecture with Cloud Layer (Master), Edge Layer (heterogeneous agents), and Data Source Layer (cameras and users).</div>
+        </div>
+    </div>
+</section>
+
+<!-- Workflow -->
+<section>
+    <div class="container">
+        <h2 class="section-title">Workflow</h2>
+        <p class="section-subtitle">A 15-step event-driven pipeline from motion detection to result visualization.</p>
+        <div class="figure">
+            <img src="images/work-flow.png" alt="ReIDFaaS Workflow">
+            <div class="figure-caption">Figure 2: The workflow of ReIDFaaS. Black solid lines represent data flow; red dashed lines represent event flow.</div>
+        </div>
+    </div>
+</section>
+
+<!-- Experimental Results -->
+<section>
+    <div class="container">
+        <h2 class="section-title">Experimental Results</h2>
+
+        <!-- Serverless vs Non-Serverless -->
+        <h3 style="font-size: 20px; margin: 32px 0 16px; color: var(--accent);">Serverless vs. Non-Serverless</h3>
+        <p style="color: var(--text-light); margin-bottom: 20px;">ReIDFaaS achieves identical Re-ID accuracy while significantly improving throughput (+53%) and reducing response latency (-35%).</p>
+        <div class="figure-row">
+            <div class="figure">
+                <img src="images/Throughput.png" alt="Throughput Comparison">
+                <div class="figure-caption">Throughput comparison: Serverless exceeds Non-Serverless by 53%.</div>
+            </div>
+            <div class="figure">
+                <img src="images/ARR.png" alt="Average Response Rate">
+                <div class="figure-caption">Response latency comparison: Serverless reduces latency by 35%.</div>
+            </div>
+        </div>
+        <div class="figure">
+            <img src="images/MEM.png" alt="Memory Usage Comparison" style="max-width: 700px;">
+            <div class="figure-caption">Memory usage comparison across four nodes: Serverless reduces average usage by 35%.</div>
+        </div>
+
+        <!-- Energy-Efficient Scheduling -->
+        <h3 style="font-size: 20px; margin: 40px 0 16px; color: var(--accent);">Energy-Efficient Scheduling</h3>
+        <p style="color: var(--text-light); margin-bottom: 20px;">Our scheduler achieves the highest total remaining energy (2072Wh) and the most balanced operational availability (SD=0.8%, Range=1.8%).</p>
+
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Scheduler</th>
+                    <th>Agent 1</th>
+                    <th>Agent 2</th>
+                    <th>Agent 3</th>
+                    <th>Total Remaining</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Local</td><td>1196Wh</td><td>264Wh</td><td>220Wh</td><td>1680Wh</td></tr>
+                <tr><td>K3s</td><td>1504Wh</td><td>264Wh</td><td>168Wh</td><td>1936Wh</td></tr>
+                <tr><td>Random</td><td>1412Wh</td><td>256Wh</td><td>200Wh</td><td>1868Wh</td></tr>
+                <tr><td>ReIDFaaS</td><td>1624Wh</td><td>260Wh</td><td>188Wh</td><td>2072Wh</td></tr>
+            </tbody>
+        </table>
+
+        <div class="figure">
+            <img src="images/EnergyComparison.png" alt="Energy Comparison" style="max-width: 700px;">
+            <div class="figure-caption">Operational availability of edge nodes per scheduling strategy. ReIDFaaS achieves the most balanced distribution.</div>
+        </div>
+
+        <!-- Cold-Start Mitigation -->
+        <h3 style="font-size: 20px; margin: 40px 0 16px; color: var(--accent);">Cold-Start Mitigation via Adaptive Batching</h3>
+        <p style="color: var(--text-light); margin-bottom: 20px;">Our batching method reduces P99 latency by 30% and memory usage by 55% compared to state-of-the-art cold-start mitigation strategies.</p>
+        <div class="figure-row">
+            <div class="figure">
+                <img src="images/violin.png" alt="Latency Violin Plot">
+                <div class="figure-caption">End-to-end latency distribution. Blue solid: P99; Red dashed: average.</div>
+            </div>
+            <div class="figure">
+                <img src="images/Memory_Usage.png" alt="Memory Usage for Cold-Start Methods">
+                <div class="figure-caption">Memory usage comparison of cold-start mitigation methods.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo -->
+<section>
+    <div class="container">
+        <h2 class="section-title">System Demo</h2>
+        <p class="section-subtitle">Users upload query images of a target person, and the system identifies matching persons across all camera feeds.</p>
+        <div class="figure-row">
+            <div class="figure">
+                <img src="images/2.png" alt="Upload Interface">
+                <div class="figure-caption">Upload interface: Users provide a User ID and query images.</div>
+            </div>
+            <div class="figure">
+                <img src="images/1.png" alt="Re-ID Results">
+                <div class="figure-caption">Query results: Matched target person identified across multiple camera views.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Citation -->
+<section id="citation">
+    <div class="container">
+        <h2 class="section-title">Citation</h2>
+        <p style="text-align:center; color: var(--text-light); margin-bottom: 20px;">If you find this work useful, please cite our paper:</p>
+        <div class="bibtex-box">
+            <button class="copy-btn" onclick="copyBibtex()">Copy</button>@inproceedings{pei2025reidfaas,
+  title     = {ReIDFaaS: An Energy-Efficient Serverless Person
+               Re-Identification System Across the Edge-Cloud Continuum},
+  author    = {Pei, Jianping and Shu, Yanjun and Ma, Zhuangyu
+               and Zuo, Decheng and Zhang, Zhan},
+  booktitle = {2025 IEEE International Conference on Web Services (ICWS)},
+  year      = {2025},
+  publisher = {IEEE}
+}</div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="funding">
+        <strong>Acknowledgments:</strong> This research is supported by the National Key Research and Development Program of China (Grant No. 2024YFB4506003) and the National Natural Science Foundation of China (Grant Nos. 61202091, 62171155).
+    </div>
+    <p>
+        <a href="https://github.com/jianpingpei/Energy-Efficient-ReIDFaaS" target="_blank">GitHub</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://ieeexplore.ieee.org/document/11169601/" target="_blank">IEEE Xplore</a>
+        &nbsp;&middot;&nbsp;
+        Faculty of Computing, Harbin Institute of Technology
+    </p>
+</footer>
+
+<script>
+function copyBibtex() {
+    const bibtex = document.querySelector('.bibtex-box').textContent.replace('Copy', '').trim();
+    navigator.clipboard.writeText(bibtex).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+}
+</script>
+
+</body>
+</html>
